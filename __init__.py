@@ -16,7 +16,22 @@ Implement an endpoint `/api/fetch` that returns the contents of `data.csv` as JS
 
 """
 
-# your work here
+from flask import jsonify
+import pandas as pd
+
+@app.route("/api/fetch", methods=['GET'])
+def convert_csv_to_json():
+    csv_file_data = pd.read_csv("data.csv")
+    
+    full_name = csv_file_data['first_name'] + ' ' + csv_file_data['last_name']
+    time_zone = csv_file_data['time_zone']
+    dept = csv_file_data['dept']
+
+    employees_data = {'name': full_name, 'timezone': time_zone, 'dept': dept}
+    employees = pd.DataFrame(employees_data)
+
+    response_object = {'employees': employees.to_dict(orient='records')}
+    return jsonify(response_object)
 
 """
 
